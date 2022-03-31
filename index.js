@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
   // database connection linked
   mongoose.connect(process.env.MONGO_URI);
 
-  const Movies = mongoose.model("Movies", {
+  const Movies = mongoose.model("Netflix", {
     //   unique is a restraint
     Title: { type: String, unique: true },
     Actor: { type: String, unique: false },
@@ -31,9 +31,16 @@ const mongoose = require("mongoose");
 
   // ! how to add a cat object
   // try {
-  //   const cat = new Cat({ name: "dan", age: 2 });
-  //   await cat.save();
-  //   console.log("im the cat", cat);
+  //   const movie = new Movies({
+  //     Title: "helloo",
+  //     Actor: "dskjnf",
+  //     Year: 1988,
+  //     Genre: "thriller",
+  //     Rating: 3,
+  //     Director: "bob",
+  //   });
+  //   await movie.save();
+  //   console.log("im the cat", movie);
   // } catch (error) {
   //   console.log(error);
   // }
