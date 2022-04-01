@@ -11,32 +11,30 @@ const mongoose = require("mongoose");
 const Movie = require("./models/movies");
 // utils imports
 const add = require("./utils/add");
-
+const find = require("./utils/find");
+////////////////////////
 (async () => {
   // database connection linked
-  mongoose.connect(process.env.MONGO_URI);
-
-  // await Movie.syncIndexes();
+  await mongoose.connect(process.env.MONGO_URI);
+  // reads models and makes mongoosedb use that structure
+  await Movie.syncIndexes();
 
   // ! how to add a MOVIE object
   // node index.js --add --title --actor --year --genre --rating --director
 
   if (argv.add) {
-    add(argv);
+    await add(argv);
   }
   //! how to find by title
   // node index.js --findOne --title "titlename"
-  else if (argv.findOne) {
-    const foundOne = await Movie.findOne({
-      title: argv.title,
-    });
-    console.log(foundOne);
+  else if (argv.find) {
+    await find(argv);
   }
   //!   delete method
   // node index.js --deleteOne --title "title" or --genre etc.....
   else if (argv.deleteOne) {
     const deleteMovie = await Movie.deleteOne({
-      title: argv.title,
+      [argv.key]: argv.value,
     });
     console.log(`${argv.title} has been deleted from the system`);
   }
@@ -63,7 +61,7 @@ const add = require("./utils/add");
   }
 
   // terminates connection to allow us to write in terminal
-  mongoose.connection.close();
+  await mongoose.connection.close();
 })();
 
 // todo feature / implemented list branch name for next git push
