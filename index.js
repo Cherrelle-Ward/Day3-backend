@@ -7,40 +7,22 @@ const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
 
 const mongoose = require("mongoose");
+// model imports
+const Movie = require("./models/movies");
+// utils imports
+const add = require("./utils/add");
 
 (async () => {
   // database connection linked
   mongoose.connect(process.env.MONGO_URI);
 
-  const Movie = mongoose.model("Movie", {
-    //   unique is a restraint
-    title: { type: String, unique: true },
-    actor: { type: String, unique: false },
-    year: Number,
-    genre: String,
-    rating: {
-      type: Number,
-      min: 1,
-      max: 5,
-    },
-    director: String,
-  });
   // await Movie.syncIndexes();
 
   // ! how to add a MOVIE object
   // node index.js --add --title --actor --year --genre --rating --director
 
   if (argv.add) {
-    const movie = new Movie({
-      title: argv.title,
-      actor: argv.actor,
-      year: argv.year,
-      genre: argv.genre,
-      rating: argv.rating,
-      director: argv.director,
-    });
-    await movie.save();
-    console.log(movie);
+    add(argv);
   }
   //! how to find by title
   // node index.js --findOne --title "titlename"
@@ -55,11 +37,6 @@ const mongoose = require("mongoose");
   else if (argv.deleteOne) {
     const deleteMovie = await Movie.deleteOne({
       title: argv.title,
-      // actor: argv.actor,
-      // year: argv.year,
-      // genre: argv.genre,
-      // rating: argv.rating,
-      // director: argv.director,
     });
     console.log(`${argv.title} has been deleted from the system`);
   }
@@ -80,7 +57,7 @@ const mongoose = require("mongoose");
   }
   // ! LIST
   // node index.js
-  else if (argv.find) {
+  else if (argv.list) {
     const movieCollection = await Movie.find({ Movie });
     console.log({ movieCollection });
   }
