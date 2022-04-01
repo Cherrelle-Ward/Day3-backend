@@ -11,59 +11,41 @@ const mongoose = require("mongoose");
 const Movie = require("./models/movies");
 // utils imports
 const add = require("./utils/add");
+const find = require("./utils/find");
+const deleteMovie = require("./utils/delete");
+const update = require("./utils/update");
 
 (async () => {
   // database connection linked
-  mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGO_URI);
+  // reads models and makes mongoosedb use that structure
+  await Movie.syncIndexes();
 
-  // await Movie.syncIndexes();
-
-  // ! how to add a MOVIE object
-  // node index.js --add --title --actor --year --genre --rating --director
-
+  // ! add a MOVIE object
   if (argv.add) {
-    add(argv);
+    await add(argv);
   }
-  //! how to find by title
-  // node index.js --findOne --title "titlename"
-  else if (argv.findOne) {
-    const foundOne = await Movie.findOne({
-      title: argv.title,
-    });
-    console.log(foundOne);
+  //! find by
+  else if (argv.find) {
+    await find(argv);
   }
-  //!   delete method
-  // node index.js --deleteOne --title "title" or --genre etc.....
-  else if (argv.deleteOne) {
-    const deleteMovie = await Movie.deleteOne({
-      title: argv.title,
-    });
-    console.log(`${argv.title} has been deleted from the system`);
+  //!   delete
+  else if (argv.deleteMovie) {
+    await deleteMovie(argv);
   }
-  //! how to update object'
-  // node index.js --updateOne --title "title" --updatedTitle "newname"
-  else if (argv.updateOne) {
-    const updateMovie = await Movie.findOne({ title: argv.title }).updateOne({
-      title: argv.updatedTitle,
-    });
-    console.log(`${argv.title} has been updated to ${argv.updatedTitle}`);
-    ///////////////////////
-    // not working example
-    // const updateMovie = await Movie.updateOne(
-    //   { title: argv.title },
-    //   { title: argv.updatedTitle }
-    // );
-    // console.log(updateMovie);
+  //! update
+  else if (argv.update) {
+    await update(argv);
   }
   // ! LIST
-  // node index.js
+  // *npm start -- --list
   else if (argv.list) {
     const movieCollection = await Movie.find({ Movie });
     console.log({ movieCollection });
   }
 
   // terminates connection to allow us to write in terminal
-  mongoose.connection.close();
+  await mongoose.connection.close();
 })();
 
 // todo feature / implemented list branch name for next git push
