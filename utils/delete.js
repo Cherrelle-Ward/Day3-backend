@@ -1,6 +1,6 @@
 const Movie = require("../models/movies");
-// npm start -- --deleteMovie --deleteOne --key "insert here" --value "insert here"
-// npm start -- --deleteMovie --deleteMany --key "insert here" --value "insert here"
+// *npm start -- --deleteMovie --deleteOne --key "insert here" --value "insert here"
+// *npm start -- --deleteMovie --deleteMany --key "insert here" --value "insert here"
 
 const deleteMovie = async (argv) => {
   try {

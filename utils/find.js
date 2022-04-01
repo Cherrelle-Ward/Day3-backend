@@ -1,5 +1,6 @@
 const Movie = require("../models/movies");
-// npm start -- --find --findOne --key "keyhere" --value "value"
+// *npm start -- --find --findOne --key "keyhere" --value "value"
+
 const find = async (argv) => {
   try {
     if (argv.findOne) {

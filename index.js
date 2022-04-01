@@ -13,7 +13,8 @@ const Movie = require("./models/movies");
 const add = require("./utils/add");
 const find = require("./utils/find");
 const deleteMovie = require("./utils/delete");
-////////////////////////
+const update = require("./utils/update");
+
 (async () => {
   // database connection linked
   await mongoose.connect(process.env.MONGO_URI);
@@ -21,35 +22,23 @@ const deleteMovie = require("./utils/delete");
   await Movie.syncIndexes();
 
   // ! add a MOVIE object
-
   if (argv.add) {
     await add(argv);
   }
-  //! find by title
+  //! find by
   else if (argv.find) {
     await find(argv);
   }
-  //!   delete method
+  //!   delete
   else if (argv.deleteMovie) {
     await deleteMovie(argv);
   }
-  //! how to update object'
-  // node index.js --updateOne --title "title" --updatedTitle "newname"
-  else if (argv.updateOne) {
-    const updateMovie = await Movie.findOne({ title: argv.title }).updateOne({
-      title: argv.updatedTitle,
-    });
-    console.log(`${argv.title} has been updated to ${argv.updatedTitle}`);
-    ///////////////////////
-    // not working example
-    // const updateMovie = await Movie.updateOne(
-    //   { title: argv.title },
-    //   { title: argv.updatedTitle }
-    // );
-    // console.log(updateMovie);
+  //! update
+  else if (argv.update) {
+    await update(argv);
   }
   // ! LIST
-  // node index.js
+  // *npm start -- --list
   else if (argv.list) {
     const movieCollection = await Movie.find({ Movie });
     console.log({ movieCollection });
